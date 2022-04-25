@@ -1,0 +1,15 @@
+<aspectj>
+
+    <weaver options="-Xreweavable -verbose -showWeaveInfo">
+        <include within="com.dataken.TenantFilterAspectaaa"/>
+        <include within="org.hibernate.internal.SessionFactoryImpl.SessionBuilderImpl"/>
+    </weaver>
+
+    <aspects>
+        <aspect name="com.dataken.TenantFilterAspectaaa"/>
+        <include within="com.dataken.TenantFilterAspectaaa"/>
+    </aspects>
+
+    <weaver options="-debug"/>
+
+</aspectj>
