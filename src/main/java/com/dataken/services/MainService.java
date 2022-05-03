@@ -9,7 +9,9 @@ import com.dataken.pojo.Modifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -18,6 +20,9 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class MainService {
     private static final Logger log = LoggerFactory.getLogger(MainService.class);
+
+    @Context
+    private HttpServletRequest request;
 
     @Path("/hello/{message}")
     @GET

@@ -15,13 +15,20 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Aspect
 public class TenantFilterAspect {
 
     private static final Logger log = LoggerFactory.getLogger(TenantFilterAspect.class);
+
+    @Context
+    private HttpServletRequest request;
 
     @Pointcut("execution (* org.hibernate.internal.SessionFactoryImpl.SessionBuilderImpl.openSession(..))")
     public void openSession() {
@@ -69,7 +76,16 @@ public class TenantFilterAspect {
 
     @Around("execution (* com.dataken.services.*.*(..)) && @annotation(modifier)")
     public void modifier(ProceedingJoinPoint pjp, Modifier modifier) {
-        log.info("Before executing the saveGlobalEmployeeMethod <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        Object target = pjp.getTarget();
+        HttpServletRequest request = null;
+        try {
+            Field fieldRequest = target.getClass().getDeclaredField("request");
+            fieldRequest.setAccessible(true);
+            request = (HttpServletRequest) fieldRequest.get(target);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        log.info("Before executing the saveGlobalEmployeeMethod: {} <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", request.getSession());
         try {
             pjp.proceed();
         } catch (Throwable e) {
