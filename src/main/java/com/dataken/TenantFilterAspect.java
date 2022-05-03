@@ -3,6 +3,7 @@ package com.dataken;
 import com.dataken.dao.EmployeeDAO;
 import com.dataken.pojo.Details;
 import com.dataken.pojo.Employee;
+import com.dataken.pojo.Modifier;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -64,6 +65,17 @@ public class TenantFilterAspect {
 
         employees.addAll(employees2);
         return employees;
+    }
+
+    @Around("execution (* com.dataken.services.*.*(..)) && @annotation(modifier)")
+    public void modifier(ProceedingJoinPoint pjp, Modifier modifier) {
+        log.info("Before executing the saveGlobalEmployeeMethod <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        try {
+            pjp.proceed();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        log.info("After executing the saveGlobalEmployee method >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     }
 
 }

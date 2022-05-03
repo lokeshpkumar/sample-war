@@ -5,6 +5,7 @@ import com.dataken.Log;
 import com.dataken.dao.EmployeeDAO;
 import com.dataken.pojo.Details;
 import com.dataken.pojo.Employee;
+import com.dataken.pojo.Modifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ public class MainService {
 
     @Path("/save")
     @POST
+    @Modifier
     public void saveGlobalEmployee(Employee employee, @QueryParam("global") boolean global
             , @QueryParam("tenantId") String tenantId) {
         log.info(">>> THE GLOBAL PARAM RECIEVED: {}, Tenant ID: {}", global, tenantId);
